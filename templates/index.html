@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wattson Dashboard</title>
+    <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <h1 style="margin:0;">⚡🤖 Wattson</h1>
+            <a href="/">Home</a>
+            <a href="/issue">Raise Issue</a>
+            <a href="/chat">Chatbot</a>
+        </div>
+        <div class="nav-right">
+            <a href="/profile" class="profile-btn">
+                <span>{{ profile.name }}</span>
+                <div class="avatar-circle">{{ profile.name[0] }}</div>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <h2 style="text-align: left;">Welcome, {{ profile.name }}! 👋</h2>
+        <h3 style="text-align: left; margin-bottom: 20px;">Household Health: <span class="status-{{ data.status }}">{{ data.status }}</span></h3>
+        
+        <div class="stats-grid">
+            <div class="card">
+                <h3>Monthly Consumption</h3>
+                <p class="big-num">{{ data.units }} Units</p>
+            </div>
+            <div class="card">
+                <h3>Est. Bill</h3>
+                <p class="big-num">₹{{ data.bill }}</p>
+            </div>
+        </div>
+
+        <!-- THE CHART SECTION -->
+        <div class="card">
+            <h3>Appliance Breakdown</h3>
+            <div class="chart-container" style="position: relative; height:300px; width:100%; display: flex; justify-content: center;">
+                <canvas id="usageChart"></canvas>
+            </div>
+        </div>
+
+        <!-- UPDATE BILL SECTION -->
+        <div class="card">
+            <h3>Update Meter Reading</h3>
+            <form action="/edit_bill" method="POST" style="display: flex; gap: 10px; justify-content: center;">
+                <input type="number" name="units" placeholder="Enter new units" style="max-width: 200px; margin: 0;">
+                <button type="submit" style="width: auto;">Update Bill</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const ctx = document.getElementById('usageChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: ['AC', 'Heater', 'Fridge', 'Others'],
+                datasets: [{
+                    data: [45, 30, 15, 10],
+                    backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0']
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false, // This is the magic line that stops it from growing huge
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+    </script>
+<footer class="simple-footer">
+    <p>Developed by Bhanvi Singh Chauhan - bhanvisinghchauhan08@gmail.com</p>
+</footer>
+</body>
+</html>

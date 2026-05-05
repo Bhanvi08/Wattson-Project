@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Raise Issue</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <!-- <nav>
+        <h1>⚡ Wattson</h1>
+        <div><a href="/">Home</a> <a href="/issue">Raise Issue</a> <a href="/chat">Chatbot</a></div>
+    </nav> -->
+    <nav>
+        <div class="nav-left">
+            <h1 style="margin:0;">⚡🤖 Wattson</h1>
+            <a href="/">Home</a>
+            <a href="/issue">Raise Issue</a>
+            <a href="/chat">Chatbot</a>
+        </div>
+
+        <div class="nav-right">
+            <a href="/profile" class="profile-btn">
+                <span>{{ profile.name.split(' ')[0] }}</span> <!-- Shows only first name -->
+                <div class="avatar-circle">
+                    <!-- If you have a photo, it shows here. Otherwise, it shows the first letter -->
+                    {% if profile.photo and 'flaticon' not in profile.photo %}
+                    <img src="{{ profile.photo }}">
+                    {% else %}
+                    {{ profile.name[0] }}
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="card">
+            <h2>What's the problem? 🛠️</h2>
+            <select id="issueSelect">
+                <option value="High Bill">High Electricity Bill</option>
+                <option value="MCB Tripped">MCB/Fuse Tripped</option>
+                <option value="Flickering Lights">Flickering Lights</option>
+            </select>
+            <div class="checkbox-group">
+                <label class="checkbox-item">
+                    <input type="checkbox" class="detail" value="AC used 10+ hours">
+                    <span>AC used 10+ hours</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" class="detail" value="Old Appliances">
+                    <span>Old Appliances</span>
+                </label>
+                <label class="checkbox-item">
+                    <input type="checkbox" class="detail" value="Recent Storm">
+                    <span>Recent Storm/Rain</span>
+                </label>
+            </div>
+            <button onclick="analyze()">Analyze with AI</button>
+        </div>
+
+        <div id="ai-response" class="card" style="display:none; margin-top: 20px; border-left: 5px solid #3498db;">
+            <h3>🔍 AI Analysis</h3>
+            <p id="diagnosisText"></p>
+        </div>
+    </div>
+
+    <script>
+        function analyze() {
+            const issue = document.getElementById('issueSelect').value;
+            const details = Array.from(document.querySelectorAll('.detail:checked')).map(el => el.value);
+
+            fetch('/analyze_issue', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ issue: issue, details: details })
+            })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('ai-response').style.display = 'block';
+                    document.getElementById('diagnosisText').innerText = data.diagnosis;
+                });
+        }
+    </script>
+<footer class="simple-footer">
+    <p>Developed by Bhanvi Singh Chauhan - bhanvisinghchauhan08@gmail.com</p>
+</footer>
+</body>
+
+</html>

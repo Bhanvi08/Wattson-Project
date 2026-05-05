@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Profile</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <h1>⚡🤖 Wattson</h1>
+            <a href="/">Home</a>
+            <a href="/issue">Raise Issue</a>
+            <a href="/chat">Chatbot</a>
+        </div>
+        <div class="nav-right">
+            <a href="/profile" class="profile-btn">
+                <span>{{ profile.name }}</span>
+                <div class="avatar-circle">{{ profile.name[0] }}</div>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="card">
+            <div class="avatar-circle" style="width: 80px; height: 80px; font-size: 2rem; margin: 0 auto 20px;">
+                {{ profile.name[0] }}
+            </div>
+            <h2>Edit Profile</h2>
+            <form action="/profile" method="POST">
+                <label style="display:block; text-align:left; margin-bottom:5px;">Full Name</label>
+                <input type="text" name="name" value="{{ profile.name }}">
+                
+                <label style="display:block; text-align:left; margin-bottom:5px;">Email Address</label>
+                <input type="email" name="email" value="{{ profile.email }}">
+                
+                <label style="display:block; text-align:left; margin-bottom:5px;">Phone Number</label>
+                <input type="text" name="phone" value="{{ profile.phone }}">
+                
+                <button type="submit">Save Changes</button>
+            </form>
+            <br>
+            <a href="/" style="color: #3498db; text-decoration: none;">← Back to Dashboard</a>
+        </div>
+    </div>
+<footer class="simple-footer">
+    <p>Developed by Bhanvi Singh Chauhan - bhanvisinghchauhan08@gmail.com</p>
+</footer>
+</body>
+</html>

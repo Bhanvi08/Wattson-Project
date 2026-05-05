@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Wattson Chat</title> 
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <h1 style="margin:0;">⚡ Wattson</h1>
+            <a href="/">Home</a>
+            <a href="/issue">Raise Issue</a>
+            <a href="/chat">Chatbot</a>
+        </div>
+
+        <div class="nav-right">
+            <a href="/profile" class="profile-btn">
+                <span>{{ profile.name.split(' ')[0] }}</span> 
+                <div class="avatar-circle">
+                    {% if profile.photo and 'flaticon' not in profile.photo %}
+                        <img src="{{ profile.photo }}">
+                    {% else %}
+                        {{ profile.name[0] }}
+                    {% endif %}
+                </div>
+            </a>
+        </div>
+    </nav>
+
+    <div class="container">
+ 
+        <h2>Chat with Wattson 🤖</h2>
+        
+        <div class="card" style="height: 400px; overflow-y: auto; text-align: left; display: flex; flex-direction: column; gap: 10px;" id="chatbox">
+            <div style="background: #e1f5fe; padding: 10px; border-radius: 10px; align-self: flex-start; max-width: 80%;">
+                <!-- Removed [Backend Connected] -->
+                <strong>Wattson:</strong> Hi! Ask me about your bill or safety.
+            </div>
+        </div>
+        
+        <div style="display: flex; margin-top: 10px; gap: 10px;">
+            <input type="text" id="userInput" placeholder="Type a message..." style="margin-bottom: 0;">
+            <button onclick="sendChat()" style="width: auto;">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendChat() {
+            const input = document.getElementById('userInput');
+            const chatbox = document.getElementById('chatbox');
+            const userMessage = input.value;
+            
+            if(userMessage == "") return;
+
+            chatbox.innerHTML += `<div style="background: #eee; padding: 10px; border-radius: 10px; align-self: flex-end; max-width: 80%;"><strong>You:</strong> ${userMessage}</div>`;
+            input.value = "";
+            chatbox.scrollTop = chatbox.scrollHeight;
+
+            fetch('/get_chat_response', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: userMessage})
+            })
+            .then(res => res.json())
+            .then(data => {
+                chatbox.innerHTML += `<div style="background: #e1f5fe; padding: 10px; border-radius: 10px; align-self: flex-start; max-width: 80%;"><strong>Wattson:</strong> ${data.response}</div>`;
+                chatbox.scrollTop = chatbox.scrollHeight;
+            })
+            .catch(err => {
+                chatbox.innerHTML += `<div style="color: red;">Error: Cannot connect to Python backend.</div>`;
+            });
+        }
+    </script>
+<footer class="simple-footer">
+    <p>Developed by Bhanvi Singh Chauhan - bhanvisinghchauhan08@gmail.com</p>
+</footer>
+</body>
+</html>
