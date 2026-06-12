@@ -63,5 +63,3 @@ FUTURE ROADMAP
 DEVELOPER
 
   - Bhanvi Singh Chauhan: Lead System Architect and Full Stack Developer
-This version makes it clear that YOU own the entire architecture. It is the
-perfect anchor for your portfolio. 🚀⚡🦾🏾‍♂️
